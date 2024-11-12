@@ -1,6 +1,6 @@
 # Nexpress Express js template
 
-This is a next level express js inspired by[typescript-mongoose-express-backend-template
+This is a next level express js template inspired by [typescript-mongoose-express-backend-template
 ](https://github.com/siffahim/typescript-mongoose-express-backend-template) created by [siffahim](https://github.com/siffahim)
 
 ## Features
