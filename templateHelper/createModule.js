@@ -137,6 +137,10 @@ const get${capitalizedModuleName}ById = async (id: string): Promise<I${capitaliz
 };
 
 const update${capitalizedModuleName} = async (id: string, payload: I${capitalizedModuleName}): Promise<I${capitalizedModuleName} | null> => {
+  const isExist${capitalizedModuleName} = await get${capitalizedModuleName}ById(id);
+  if (!isExist${capitalizedModuleName}) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, '${capitalizedModuleName} not found!');
+  }
   const result = await ${capitalizedModuleName}.findByIdAndUpdate(id, payload, { new: true });
   if (!result) {
     throw new ApiError(StatusCodes.BAD_REQUEST, 'Failed to update ${name}!');
@@ -145,6 +149,10 @@ const update${capitalizedModuleName} = async (id: string, payload: I${capitalize
 };
 
 const delete${capitalizedModuleName} = async (id: string): Promise<I${capitalizedModuleName} | null> => {
+  const isExist${capitalizedModuleName} = await get${capitalizedModuleName}ById(id);
+  if (!isExist${capitalizedModuleName}) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, '${capitalizedModuleName} not found!');
+  }
   const result = await ${capitalizedModuleName}.findByIdAndDelete(id);
   if (!result) {
     throw new ApiError(StatusCodes.BAD_REQUEST, 'Failed to delete ${name}!');
