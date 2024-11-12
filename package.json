@@ -9,6 +9,10 @@
     "lint:fix": "lint . --fix",
     "prettier:check": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
     "prettier:fix": "prettier --write .",
+    "module": "node templateHelper/createModule.js",
+    "createModule": "node templateHelper/createModule.js create",
+    "build": "yarn && yarn run tsc",
+    "push": "git add . && git commit -m 'making some changes' && git push",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
