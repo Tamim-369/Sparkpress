@@ -1,6 +1,7 @@
-# Project Name
+# Nexpress Express js template
 
-This is a template project for backend development using Typescript, Node.js, Express, Mongoose, Bcrypt, JWT, NodeMailer, Multer, ESLint, and Prettier. The aim is to reduce setup time for new backend projects.
+This is a next level express js inspired by[typescript-mongoose-express-backend-template
+](https://github.com/siffahim/typescript-mongoose-express-backend-template) created by [siffahim](https://github.com/siffahim)
 
 ## Features
 
