@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "main": "createModule.js",
   "license": "MIT",
+  "scripts": {
+    "build":"pkg . --targets node18-win-x64"
+  },
   "engines": {
     "node": ">=18.0.0"
   },

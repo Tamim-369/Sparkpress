@@ -190,9 +190,13 @@ const generateValidationTemplate = (name, capitalizedModuleName, fields) => {
         return `${field.name}: z.array(z.string({ invalid_type_error:"${field.name} array item should have type string" })).optional()`;
       }
       if (field.type.includes('array')) {
-        return `${field.name}: z.array(z.${field.type.split('=>')[1]}({ invalid_type_error:"${field.name} array item should have type ${field.type.split('=>')[1]}" })).optional()`;
+        return `${field.name}: z.array(z.${field.type.split('=>')[1]}({ invalid_type_error:"${field.name} array item should have type ${field.type.includes('array=>ref=>')? 'string' : field.type.split('=>')[1]}" })).optional()`;
       }
-      return `${field.name}: z.${field.type.includes('ref') ? "string" : field.type}({ invalid_type_error:"${field.name} should be type ${field.type}" }).optional()`;
+      if(field.type.includes('ref') && !field.type.includes('array')) {
+        console.log(true)
+        return `${field.name}: z.string({ invalid_type_error:"${field.name} should be type string" }).optional()`;
+      }
+      return `${field.name}: z.${field.type.includes('ref') ? "string" : field.type}({ invalid_type_error:"${field.name} should be type ${field.type.includes('ref=>') ? "objectID or string" : field.type}" })`;
     }).join(',\n      ');
   };
 
