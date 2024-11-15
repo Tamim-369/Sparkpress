@@ -1,5 +1,7 @@
 const { program } = require('commander');
 const fs = require('fs');
+const axios = require('axios');
+
 const { automatePostman } = require('./createModulePostman');
 
 const generateRouteTemplate = (name, capitalizedModuleName) => `

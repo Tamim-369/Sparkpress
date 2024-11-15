@@ -17,7 +17,9 @@ const getAllRandoms = async (search: string, page: number | null, limit: number 
         { field3: { $regex: search, $options: 'i' } },
         { field4: { $regex: search, $options: 'i' } },
         { field5: { $regex: search, $options: 'i' } },
-        { field6: { $regex: search, $options: 'i' } }] } : {};
+        { field6: { $regex: search, $options: 'i' } },
+        { field7: { $regex: search, $options: 'i' } },
+        { field8: { $regex: search, $options: 'i' } }] } : {};
   let queryBuilder = Random.find(query);
 
   if (page && limit) {

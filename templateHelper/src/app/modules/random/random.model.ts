@@ -7,7 +7,9 @@ const randomSchema = new Schema<IRandom, RandomModel>({
   field3: { type: Schema.Types.ObjectId, ref: 'Product', required: true },
   field4: { type: Date, required: true },
   field5: [{ type: Schema.Types.ObjectId, ref: 'Product'},],
-  field6: {type: [Number], required: true }
+  field6: {type: [Number], required: true },
+  field7: {type: [Date], required: true },
+  field8: { type: Number, required: true }
 }, { timestamps: true });
 
 export const Random = model<IRandom, RandomModel>('Random', randomSchema);

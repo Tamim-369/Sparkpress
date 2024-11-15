@@ -6,7 +6,9 @@ export type IRandom = {
   field3: Types.ObjectId;
   field4: Date;
   field5: [Types.ObjectId];
-  field6: Array<number>
+  field6: Array<number>;
+  field7: Array<date>;
+  field8: number
 };
 
 export type RandomModel = Model<IRandom>;
