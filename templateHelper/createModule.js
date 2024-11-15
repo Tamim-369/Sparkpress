@@ -475,7 +475,7 @@ const createModule = (name, fields) => {
       },
     ];
     // console.log(JSON.stringify(requestsArray));
-    const { config } = require(`${process.cwd()}/nexpress.config.js`);
+    const { config } = require(`${process.cwd()}/sparkpress.config.js`);
     automatePostman(
       config.postman_api_key,
       config.postman_folder_name,
