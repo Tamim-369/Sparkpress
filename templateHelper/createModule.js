@@ -95,7 +95,11 @@ const generateInterfaceTemplate = (name, capitalizedModuleName, fields) => {
         if (field.type.includes('array')) {
           const baseType = field.type.split('=>')[1];
           return `${field.name}: Array<${
-            baseType.includes('ref') ? 'Types.ObjectId' : baseType
+            baseType.includes('ref')
+              ? 'Types.ObjectId'
+              : baseType.includes('date')
+              ? 'Date'
+              : baseType
           }>`;
         }
         return `${field.name}: ${field.type}`;
