@@ -77,10 +77,6 @@ const automatePostman = async (
           key: 'Authorization',
           value: `Bearer ${request.token || ''}`,
         },
-        {
-          key: 'Content-Type',
-          value: 'application/json',
-        },
       ],
       body: {
         mode: 'raw',
