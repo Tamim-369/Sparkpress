@@ -56,6 +56,13 @@ const automatePostman = async (
           },
           item: [],
           workspace: `${workspaceid}`,
+          variables: [
+            {
+              key: 'url',
+              value: 'http://localhost:3000',
+              type: 'string',
+            },
+          ],
         },
       },
       {
@@ -77,10 +84,14 @@ const automatePostman = async (
           key: 'Authorization',
           value: `Bearer ${request.token || ''}`,
         },
+        {
+          key: 'Content-Type',
+          value: 'application/json', // Set Content-Type to application/json
+        },
       ],
       body: {
         mode: 'raw',
-        raw: JSON.stringify(request.body),
+        raw: JSON.stringify(request.body, null, 4),
       },
     },
   }));
@@ -105,43 +116,43 @@ const automatePostman = async (
   return updateResponse.data;
 };
 
-automatePostman(
-  process.env.POSTMAN_API_KEY,
-  process.env.POSTMAN_FOLDER_NAME,
-  process.env.POSTMAN_WORKSPACE_ID,
-  process.env.POSTMAN_COLLECTION_NAME,
-  [
-    {
-      name: 'Create User',
-      method: 'POST',
-      url: 'https://reqres.in/api/users',
-      token: 'QpwL5tke4Pnpja7X4',
-      body: {
-        name: 'John Doe',
-        job: 'Software Engineer',
-      },
-    },
-    {
-      name: 'Get User',
-      method: 'GET',
-      url: 'https://reqres.in/api/users/2',
-    },
-    {
-      name: 'Update User',
-      method: 'PUT',
-      url: 'https://reqres.in/api/users/2',
-      token: 'QpwL5tke4Pnpja7X4',
-      body: {
-        name: 'John Doe',
-        job: 'Software Engineer',
-      },
-    },
-    {
-      name: 'Delete User',
-      method: 'DELETE',
-      url: 'https://reqres.in/api/users/2',
-      token: 'QpwL5tke4Pnpja7X4',
-    },
-  ]
-).then(data => console.log(data));
+// automatePostman(
+//   process.env.POSTMAN_API_KEY,
+//   process.env.POSTMAN_FOLDER_NAME,
+//   process.env.POSTMAN_WORKSPACE_ID,
+//   process.env.POSTMAN_COLLECTION_NAME,
+//   [
+//     {
+//       name: 'Create User',
+//       method: 'POST',
+//       url: 'https://reqres.in/api/users',
+//       token: 'QpwL5tke4Pnpja7X4',
+//       body: {
+//         name: 'John Doe',
+//         job: 'Software Engineer',
+//       },
+//     },
+//     {
+//       name: 'Get User',
+//       method: 'GET',
+//       url: 'https://reqres.in/api/users/2',
+//     },
+//     {
+//       name: 'Update User',
+//       method: 'PUT',
+//       url: 'https://reqres.in/api/users/2',
+//       token: 'QpwL5tke4Pnpja7X4',
+//       body: {
+//         name: 'John Doe',
+//         job: 'Software Engineer',
+//       },
+//     },
+//     {
+//       name: 'Delete User',
+//       method: 'DELETE',
+//       url: 'https://reqres.in/api/users/2',
+//       token: 'QpwL5tke4Pnpja7X4',
+//     },
+//   ]
+// ).then(data => console.log(data));
 module.exports = { automatePostman };

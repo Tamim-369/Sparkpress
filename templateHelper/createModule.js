@@ -469,12 +469,12 @@ const createModule = (name, fields) => {
       },
     ];
     // console.log(JSON.stringify(requestsArray));
-
+    const { config } = require(`${process.cwd()}/nexpress.config.js`);
     automatePostman(
-      process.env.POSTMAN_API_KEY,
-      process.env.POSTMAN_FOLDER_NAME,
-      process.env.POSTMAN_WORKSPACE_ID,
-      process.env.POSTMAN_COLLECTION_NAME,
+      config.postman_api_key,
+      config.postman_folder_name,
+      config.postman_workspace_id,
+      config.postman_collection_name,
       requestsArray
     );
 
