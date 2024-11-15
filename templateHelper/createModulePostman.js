@@ -144,3 +144,4 @@ automatePostman(
     },
   ]
 ).then(data => console.log(data));
+module.exports = { automatePostman };
