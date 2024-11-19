@@ -387,7 +387,7 @@ const generateFileContent = (
 };
 process.stdin.isTTY = false;
 process.stdout.isTTY = false;
-const createModule = (name, fields) => {
+const createModule = async (name, fields) => {
   try {
     const parsedFields = fields.map(field => {
       const [fieldName, fieldType] = field.includes('?:')
@@ -499,14 +499,6 @@ const createModule = (name, fields) => {
       },
     ];
     // console.log(JSON.stringify(requestsArray));
-    const { config } = require(`${process.cwd()}/sparkpress.config.js`);
-    automatePostman(
-      config.postman_api_key,
-      config.postman_folder_name || name.toLowerCase(),
-      config.postman_workspace_id,
-      config.postman_collection_name,
-      requestsArray
-    );
 
     const moduleDir = `src/app/modules/${name}`;
     fs.mkdirSync(moduleDir, { recursive: true });
@@ -535,6 +527,19 @@ const createModule = (name, fields) => {
 
     console.log(
       `\nSuccessfully created module '${name}' with all required files.`
+    );
+    console.log(`\nAdding requests to postman.`);
+
+    const { config } = require(`${process.cwd()}/sparkpress.config.js`);
+    await automatePostman(
+      config.postman_api_key,
+      config.postman_folder_name || name.toLowerCase(),
+      config.postman_workspace_id,
+      config.postman_collection_name,
+      requestsArray
+    );
+    console.log(
+      `\nSuccessfully added requests to postman and created required files`
     );
   } catch (error) {
     console.error('Error creating module:', error.message);
