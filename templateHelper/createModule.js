@@ -45,24 +45,27 @@ const generateModelTemplate = (name, capitalizedModuleName, fields) => {
             .replace(
               field.type.split('=>')[1][0],
               field.type.split('=>')[1][0].toUpperCase()
-            )}], required: true }`;
+            )}], required: ${field.isRequired} }`;
         }
 
         if (field.type.includes('ref')) {
           if (field.type.includes('array=>ref')) {
-            return `${field.name}: [{ type: Schema.Types.ObjectId, ref: '${
-              field.type.split('ref=>')[1]
-            }'},]`;
+            return `${field.name}: {
+              type: [{ type: Schema.Types.ObjectId, ref: '${
+                field.type.split('ref=>')[1]
+              }'},],
+              required: ${field.isRequired}
+            }`;
           }
           return `${field.name}: { type: Schema.Types.ObjectId, ref: '${
             field.type.split('=>')[1]
-          }', required: true }`;
+          }', required: ${field.isRequired} }`;
         }
 
         return `${field.name}: { type: ${field.type.replace(
           field.type[0],
           field.type[0].toUpperCase()
-        )}, required: true }`;
+        )}, required: ${field.isRequired} }`;
       })
       .join(',\n  ');
   };
@@ -84,17 +87,18 @@ const generateInterfaceTemplate = (name, capitalizedModuleName, fields) => {
   const generateFieldTypes = fields => {
     return fields
       .map(field => {
+        fieldname = `${field.name}${field.isRequired ? '' : '?'}`;
         if (field.type.includes('ref')) {
-          return `${field.name}: ${
+          return `${fieldname}: ${
             field.type.includes('array=>ref=>')
               ? '[Types.ObjectId]'
               : 'Types.ObjectId'
           }`;
         }
-        if (field.type === 'date') return `${field.name}: Date`;
+        if (field.type === 'date') return `${fieldname}: Date`;
         if (field.type.includes('array')) {
           const baseType = field.type.split('=>')[1];
-          return `${field.name}: Array<${
+          return `${fieldname}: Array<${
             baseType.includes('ref')
               ? 'Types.ObjectId'
               : baseType.includes('date')
@@ -102,7 +106,7 @@ const generateInterfaceTemplate = (name, capitalizedModuleName, fields) => {
               : baseType
           }>`;
         }
-        return `${field.name}: ${field.type}`;
+        return `${fieldname}: ${field.type}`;
       })
       .join(';\n  ');
   };
@@ -206,20 +210,33 @@ const generateValidationTemplate = (name, capitalizedModuleName, fields) => {
     return fields
       .map(field => {
         if (field.type.includes('array=>ref=>')) {
-          return `${field.name}: z.array(z.string({ required_error:"${field.name} is required", invalid_type_error:"${field.name} array item should have type string" }))`;
+          return `${field.name}: z.array(z.string({${
+            field.isRequired === true
+              ? `required_error:"${field.name} is required",`
+              : ''
+          } invalid_type_error:"${
+            field.name
+          } array item should have type string" })${
+            field.isRequired === false ? `.optional()` : ''
+          })`;
         }
         if (field.type.includes('array')) {
-          return `${field.name}: z.array(z.${
+          return `${field.name}: z.array(z.${field.type.split('=>')[1]}({ ${
+            field.isRequired === true
+              ? `required_error:"${field.name} is required",`
+              : ''
+          } invalid_type_error:"${field.name} array item should have type ${
             field.type.split('=>')[1]
-          }({ required_error:"${field.name} is required", invalid_type_error:"${
-            field.name
-          } array item should have type ${field.type.split('=>')[1]}" }))`;
+          }" })${field.isRequired === false ? `.optional()` : ''})`;
         }
         return `${field.name}: z.${
           field.type.includes('ref') ? 'string' : field.type
-        }({ required_error:"${
-          field.name === 'Date' ? 'date' : field.name
-        } is required", invalid_type_error:"${field.name} should be type ${
+        }({ ${
+          field.isRequired &&
+          `required_error:"${
+            field.name === 'Date' ? 'date' : field.name
+          } is required",`
+        } invalid_type_error:"${field.name} should be type ${
           field.type.includes('ref') ? 'objectID or string' : field.type
         }" })`;
       })
@@ -249,7 +266,7 @@ const generateValidationTemplate = (name, capitalizedModuleName, fields) => {
           field.type.includes('ref') ? 'string' : field.type
         }({ invalid_type_error:"${field.name} should be type ${
           field.type.includes('ref=>') ? 'objectID or string' : field.type
-        }" })`;
+        }" }).optional()`;
       })
       .join(',\n      ');
   };
@@ -368,18 +385,25 @@ const generateFileContent = (
   }
   return generator(name, capitalizedModuleName, fields);
 };
-
+process.stdin.isTTY = false;
+process.stdout.isTTY = false;
 const createModule = (name, fields) => {
   try {
     const parsedFields = fields.map(field => {
-      const [fieldName, fieldType] = field.split(':');
+      const [fieldName, fieldType] = field.includes('?:')
+        ? field.replace('?:', ':').split(':')
+        : field.split(':');
 
       if (!fieldName || !fieldType) {
         throw new Error(
           `Invalid field format: ${field}. Expected format: name:type`
         );
       }
-      return { name: fieldName, type: fieldType };
+      return {
+        name: fieldName,
+        type: fieldType,
+        isRequired: field.toString().includes('?') ? false : true,
+      };
     });
     const generateRandomString = () =>
       Math.random().toString(36).substring(2, 15); // Generates a random string
@@ -517,7 +541,10 @@ const createModule = (name, fields) => {
     process.exit(1);
   }
 };
-if (process.argv.includes('--help') || process.argv.includes('-h')) {
+if (
+  process.argv.toString().includes('--help') ||
+  process.argv.toString().includes('-h')
+) {
   program.outputHelp();
 }
 program
