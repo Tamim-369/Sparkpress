@@ -478,7 +478,7 @@ const createModule = (name, fields) => {
     const { config } = require(`${process.cwd()}/sparkpress.config.js`);
     automatePostman(
       config.postman_api_key,
-      config.postman_folder_name,
+      config.postman_folder_name || name.toLowerCase(),
       config.postman_workspace_id,
       config.postman_collection_name,
       requestsArray
