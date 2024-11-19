@@ -1,5 +1,6 @@
-# Nexpress Express js template
+# Sparkpress Express js template
 
+Note: The project is still under development so it's possible to see unexpected errors
 This is a next level express js template inspired by [typescript-mongoose-express-backend-template
 ](https://github.com/siffahim/typescript-mongoose-express-backend-template) created by [siffahim](https://github.com/siffahim)
 
