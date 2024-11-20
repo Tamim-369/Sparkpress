@@ -465,7 +465,7 @@ const createModule = async (name, fields) => {
       {
         name: `Create ${name.replace(name[0], name[0].toUpperCase())}`,
         method: 'POST',
-        url: `{{url}}/api/v1/${name.toLowerCase()}`,
+        url: `{{url}}/api/v1/${name.toLowerCase()}/create`,
         token: '',
         body: {
           ...postmanFields,
