@@ -484,7 +484,7 @@ const createModule = async (name, fields) => {
       },
       {
         name: `Update ${name.replace(name[0], name[0].toUpperCase())}`,
-        method: 'PUT',
+        method: 'PATCH',
         url: `{{url}}/api/v1/${name.toLowerCase()}`,
         token: '',
         body: {
