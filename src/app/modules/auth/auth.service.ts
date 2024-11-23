@@ -246,11 +246,39 @@ const changePasswordToDB = async (
   };
   await User.findOneAndUpdate({ _id: user.id }, updateData, { new: true });
 };
+const resendEmailOTP = async (email: string) => {
+  const isExistUser = await User.findOne({ email }).select('+authentication');
+  if (!isExistUser) {
+    throw new ApiError(StatusCodes.BAD_REQUEST, "User doesn't exist!");
+  }
 
+  //send mail
+  const otp = generateOTP();
+  const value = {
+    otp,
+    email: isExistUser.email,
+  };
+  const forgetPassword = emailTemplate.resetPassword(value);
+  emailHelper.sendEmail(forgetPassword);
+
+  //save to DB
+  await User.findOneAndUpdate(
+    { _id: isExistUser._id },
+    {
+      authentication: {
+        oneTimeCode: otp,
+        expireAt: new Date(Date.now() + 3 * 60000),
+      },
+    }
+  );
+
+  return isExistUser;
+};
 export const AuthService = {
   verifyEmailToDB,
   loginUserFromDB,
   forgetPasswordToDB,
   resetPasswordToDB,
   changePasswordToDB,
+  resendEmailOTP,
 };
