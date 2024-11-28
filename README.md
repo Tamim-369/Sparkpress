@@ -3,10 +3,10 @@
 Note: The project is still under development so it's possible to see unexpected errors.
 
 This is a next level express js template inspired by [typescript-mongoose-express-backend-template
-](https://github.com/siffahim/typescript-mongoose-express-backend-template) created by [siffahim](https://github.com/siffahim)
+](https://github.com/siffahim/typescript-mongoose-express-backend-template)
 
 ## Features
-
+- **Automatic module generation:** Auto generate API modules and thier postman requests .
 - **Authentication API:** Complete authentication system using JWT for secure token-based authentication and bcrypt for password hashing.
 - **File Upload:** Implemented using Multer with efficient file handling and short-term storage.
 - **Data Validation:** Robust data validation using Zod and Mongoose schemas.
